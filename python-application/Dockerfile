@@ -1,0 +1,12 @@
+FROM python:3.7-alpine as prod
+
+RUN apk add --update gcc libc-dev linux-headers && rm -rf /var/cache/apk/*
+RUN mkdir /app/
+WORKDIR /app/
+
+COPY ./src/requirements.txt /app/requirements.txt
+RUN pip install -r requirements.txt
+COPY ./src/ /app/
+
+ENV FLASK_APP=server.py
+CMD flask run -h 0.0.0 -p 5000
